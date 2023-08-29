@@ -440,6 +440,8 @@ function CalculateRowP(Pr,TRow){
 
 function CaluclateTotal(){
   let PTotal = document.getElementById("PTotal");
+  let PTotalNet = document.getElementById("PTotalNet");
+  let ShipPr = document.getElementById("ShipPr");
   let CountRow= document.getElementById("CountRow1");
   let CountMat= document.getElementById("CountMat");
   let TableInputMt=document.getElementsByClassName("TableInputMt");
@@ -454,6 +456,7 @@ function CaluclateTotal(){
   }
   PTotal.value=total;
   CountRow.value=Rows;
+  PTotalNet.value= total + Number(ShipPr.value);
   let TableInputMa=document.getElementsByClassName("TableInputMa");
   for (let index = 0; index < TableInputMa.length; index++) {
     if (TableInputMa.item(index).parentElement.parentElement.hidden==false){
@@ -657,16 +660,31 @@ function onsubmitForm1(){
   }
 }
 
+function BillNumberIsfound(BillNumber){
+    for (let index = 0; index < DataPurchases.length; index++) {
+      if(DataPurchases[index].BillNumber==BillNumber ){
+        return true;
+      }
+  }
+  return false;
+}
+
 function onsubmitForm2(){
+  let BillNumberP =document.getElementById("BillNumberP")
   if(IstrueDataInform()===true){
-    document.getElementById("ModeP").value="2";
-    onsubmitForm(10000);
+    if(BillNumberIsfound(BillNumberP.value)==true){
+      document.getElementById("ModeP").value="2";
+      onsubmitForm(10000);
+    }
   }
 }
 
 function onsubmitForm3(){
+  let BillNumberP =document.getElementById("BillNumberP")
+  if(BillNumberIsfound(BillNumberP.value)==true){
   document.getElementById("ModeP").value="3";
   onsubmitForm(8000);
+  }
 }
 
 function onsubmitForm(Time){
@@ -765,6 +783,7 @@ function MaxBillNumber(){
     document.getElementById("AccountNameP").value=""
     document.getElementById("NoteP").value=""
     document.getElementById("PTotal").value=""
+    document.getElementById("PTotalNet").value=""
     document.getElementById("bodyBillPur").innerHTML=""    
   }
   function GetMatNameFormCode1(Code){
@@ -786,7 +805,8 @@ function MaxBillNumber(){
         document.getElementById("AccountCodeP").value=DataPurchases[index].AccountCode;
         document.getElementById("AccountNameP").value=NameAccountTable;
         document.getElementById("NoteP").value=DataPurchases[index].Note;
-        document.getElementById("PTotal").value=DataPurchases[index].Total;
+        document.getElementById("ShipPr").value=DataPurchases[index].Ship;
+        document.getElementById("PTotalNet").value=DataPurchases[index].Total;
       }
     }
     let IndexTableRow = 1;
@@ -834,20 +854,24 @@ function GetNameAccountFormCodeS(Code){
   for (let index = 0; index < DataAccounts.length; index++) {
     if(DataAccounts[index].AccountCode==Code ){
       document.getElementById("AccountNameS").value=DataAccounts[index].AccountName;
+      document.getElementById("Discount").value=DataAccounts[index].Discount;
       return ;
     }
   }
   document.getElementById("AccountNameS").value="";
+  document.getElementById("Discount").value="";
 }
 
 function GetCodeAccountFormNameS(Nam){
   for (let index = 0; index < DataAccounts.length; index++) {
     if(DataAccounts[index].AccountName==Nam ){
       document.getElementById("AccountCodeS").value=DataAccounts[index].AccountCode;
+      document.getElementById("Discount").value=DataAccounts[index].Discount;
       return ;
     }
   }
   document.getElementById("AccountCodeS").value="";
+  document.getElementById("Discount").value="";
 }
 
 function GetCodeMatFormNameS(NameA, TRow){
@@ -887,6 +911,10 @@ function CalculateRowS(Pr,TRow){
 
 function CaluclateTotalS(){
   let PTotal = document.getElementById("STotal");
+  let ShipS = document.getElementById("ShipS");
+  let Discount = document.getElementById("Discount");
+  let DiscountPaid = document.getElementById("DiscountPaid");
+  let STotalNet = document.getElementById("STotalNet");
   let CountRow= document.getElementById("CountRowS1");
   let CountMat= document.getElementById("CountMatS");
   let TableInputMt=document.getElementsByClassName("TableInputMtS");
@@ -899,8 +927,15 @@ function CaluclateTotalS(){
       Rows= Rows + 1
     }
   }
+  let Dis=0;
+  if(Discount.value > 0.99){
+    Dis=Discount.value;
+  }else{
+    Dis=Discount.value * total;
+  }
   PTotal.value=total;
   CountRow.value=Rows;
+  STotalNet.value=  total -  Number(ShipS.value) - DiscountPaid.value * (total - Dis ) - Dis ;
   let TableInputMa=document.getElementsByClassName("TableInputMaS");
   for (let index = 0; index < TableInputMa.length; index++) {
     if (TableInputMa.item(index).parentElement.parentElement.hidden==false){
@@ -1106,16 +1141,31 @@ function onsubmitFormS1(){
   }
 }
 
+function BillNumberIsfoundS(BillNumber){
+  for (let index = 0; index < DataSales.length; index++) {
+    if(DataSales[index].BillNumber==BillNumber ){
+      return true;
+    }
+}
+return false;
+}
+
 function onsubmitFormS2(){
+  let BillNumberS =document.getElementById("BillNumberS");
   if(IstrueDataInformS()===true){
-    document.getElementById("ModeS").value="2";
-    onsubmitFormS(10000);
+    if(BillNumberIsfoundS(BillNumberS.value)==true){
+      document.getElementById("ModeS").value="2";
+      onsubmitFormS(10000);
+    }
   }
 }
 
 function onsubmitFormS3(){
+  let BillNumberS =document.getElementById("BillNumberS");
+  if(BillNumberIsfoundS(BillNumberS.value)==true){
   document.getElementById("ModeS").value="3";
   onsubmitFormS(8000);
+  }
 }
 
 function onsubmitFormS(Time){
@@ -1207,6 +1257,8 @@ function MaxBillNumberS(){
     document.getElementById("AccountNameS").value=""
     document.getElementById("NoteS").value=""
     document.getElementById("STotal").value=""
+    document.getElementById("Discount").value=""
+    document.getElementById("STotalNet").value=""
     document.getElementById("bodyBillSa").innerHTML=""    
   }
 
@@ -1222,7 +1274,10 @@ function MaxBillNumberS(){
         document.getElementById("AccountCodeS").value=DataSales[index].AccountCode;
         document.getElementById("AccountNameS").value=NameAccountTable;
         document.getElementById("NoteS").value=DataSales[index].Note;
-        document.getElementById("STotal").value=DataSales[index].Total;
+        document.getElementById("ShipS").value=DataSales[index].Ship;
+        document.getElementById("Discount").value=DataSales[index].Discount;
+        document.getElementById("DiscountPaid").value=DataSales[index].DiscountPaid;
+        document.getElementById("STotalNet").value=DataSales[index].Total;
       }
     }
     let IndexTableRow = 1;
@@ -1508,17 +1563,31 @@ function onsubmitFormE1(){
     onsubmitFormE(5000);
   }
 }
+function BillNumberIsfoundE(BillNumber){
+  for (let index = 0; index < DataEntry.length; index++) {
+    if(DataEntry[index].BillNumber==BillNumber ){
+      return true;
+    }
+}
+return false;
+}
 
 function onsubmitFormE2(){
+  let BillNumberE =document.getElementById("BillNumberE");
   if(IstrueDataInformE()===true){
-    document.getElementById("ModeE").value="2";
-    onsubmitFormE(12000);
+    if(BillNumberIsfoundE(BillNumberE)==true){
+      document.getElementById("ModeE").value="2";
+      onsubmitFormE(12000);
+    }
   }
 }
 
 function onsubmitFormE3(){
-  document.getElementById("ModeE").value="3";
-  onsubmitFormE(8000);
+  let BillNumberE =document.getElementById("BillNumberE");
+  if(BillNumberIsfoundE(BillNumberE)==true){
+    document.getElementById("ModeE").value="3";
+    onsubmitFormE(8000);
+  }
 }
 
 function onsubmitFormE(Time){
@@ -1670,13 +1739,13 @@ function LoadSelectAccounts(){
     var XX=DataAccountsSeting[index].AccountClass;
     var YY=DataAccountsSeting[index].BelongeTo;
     if(DataAccountsSeting[index].Num!=""){
-    if(XX!="" ){
+    if(XX!="" && isNaN(XX)==true){
       optionClass=document.createElement("option");
       optionClass.value=XX;
       optionClass.textContent=XX;
       AccountClass.appendChild(optionClass);
     }
-    if(YY!="" ){
+    if(YY!="" && isNaN(YY)==true){
     optionClass=document.createElement("option");
     optionClass.value=YY;
     optionClass.textContent=YY;
@@ -1684,6 +1753,10 @@ function LoadSelectAccounts(){
     }
   }
   }
+  
+  document.getElementById("DiscountPaid").value=DataAccountsSeting[2].BelongeTo
+  document.getElementById("ShipS").value=DataAccountsSeting[3].BelongeTo
+  document.getElementById("ShipPr").value=DataAccountsSeting[3].BelongeTo
 }
 
 function LoadAccountsToTable(){
