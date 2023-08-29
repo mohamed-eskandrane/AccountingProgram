@@ -1575,7 +1575,7 @@ return false;
 function onsubmitFormE2(){
   let BillNumberE =document.getElementById("BillNumberE");
   if(IstrueDataInformE()===true){
-    if(BillNumberIsfoundE(BillNumberE)==true){
+    if(BillNumberIsfoundE(BillNumberE.value)==true){
       document.getElementById("ModeE").value="2";
       onsubmitFormE(12000);
     }
@@ -1584,7 +1584,7 @@ function onsubmitFormE2(){
 
 function onsubmitFormE3(){
   let BillNumberE =document.getElementById("BillNumberE");
-  if(BillNumberIsfoundE(BillNumberE)==true){
+  if(BillNumberIsfoundE(BillNumberE.value)==true){
     document.getElementById("ModeE").value="3";
     onsubmitFormE(8000);
   }
