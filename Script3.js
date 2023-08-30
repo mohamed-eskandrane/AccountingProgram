@@ -935,7 +935,7 @@ function CaluclateTotalS(){
   }
   PTotal.value=total;
   CountRow.value=Rows;
-  STotalNet.value=  total -  Number(ShipS.value) - DiscountPaid.value * (total - Dis ) - Dis ;
+  STotalNet.value=  total +  Number(ShipS.value) - DiscountPaid.value * (total - Dis ) - Dis ;
   let TableInputMa=document.getElementsByClassName("TableInputMaS");
   for (let index = 0; index < TableInputMa.length; index++) {
     if (TableInputMa.item(index).parentElement.parentElement.hidden==false){
