@@ -910,6 +910,8 @@ function CalculateRowS(Pr,TRow){
 }
 
 function CaluclateTotalS(){
+  let TotalDis =0;
+  let te=DataAccountsSeting[4].BelongeTo
   let PTotal = document.getElementById("STotal");
   let ShipS = document.getElementById("ShipS");
   let Discount = document.getElementById("Discount");
@@ -935,7 +937,8 @@ function CaluclateTotalS(){
   }
   PTotal.value=total;
   CountRow.value=Rows;
-  STotalNet.value=  total +  Number(ShipS.value) - DiscountPaid.value * (total - Dis ) - Dis ;
+  TotalDis=(DiscountPaid.value * (total - Dis ) + 1) * Number(te)
+  STotalNet.value=  total +  Number(ShipS.value) - TotalDis * Number(te) - Dis -TotalDis ;
   let TableInputMa=document.getElementsByClassName("TableInputMaS");
   for (let index = 0; index < TableInputMa.length; index++) {
     if (TableInputMa.item(index).parentElement.parentElement.hidden==false){
